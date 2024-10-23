@@ -1,0 +1,19 @@
+.list-heading {
+}
+
+.task {
+  border: 1px solid grey;
+}
+
+.task-title {
+}
+
+.task-desc {
+}
+
+.task-due {
+  font-style: italic;
+}
+
+.task-complete {
+}
