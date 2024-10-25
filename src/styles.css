@@ -1,18 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+}
+
+.new-task-modal {
+    margin: auto;
+    border: none;
+    padding: 1rem;
+}
+
 .list-heading {
 }
 
 .task {
-  border: 1px solid grey;
+    border: 1px solid grey;
+    padding: 0.8rem;
+    margin: 5px;
 }
 
 .task-title {
+    font-size: 1.5rem;
 }
 
 .task-desc {
 }
 
 .task-due {
-  font-style: italic;
+    font-style: italic;
 }
 
 .task-complete {

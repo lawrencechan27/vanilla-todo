@@ -1,7 +1,7 @@
 {
-  "name": "webpack-template",
+  "name": "tasks",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "tasks.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack serve --config webpack.dev.js",
