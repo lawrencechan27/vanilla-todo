@@ -2,7 +2,9 @@ import "./styles.css";
 // import { List, Task, render, newTaskModal } from "./tasks.js";
 
 // LISTS
+// Init
 let lists = [];
+
 class List {
     constructor(title) {
         this.title = title;
@@ -35,6 +37,7 @@ class Task {
 function render(obj) {
     const container = document.querySelector("body");
 
+    // Clear container
     container.replaceChildren();
 
     // List Heading
@@ -75,14 +78,14 @@ function render(obj) {
             newTaskDueInput.value
         ) {
             newTaskModal.close();
-            lists[0].add(
+            currentList.add(
                 new Task(
                     newTaskTitleInput.value,
                     newTaskDescInput.value,
                     newTaskDueInput.value
                 )
             );
-            render(lists[0]);
+            render(currentList);
         }
     }
 
@@ -109,8 +112,8 @@ function render(obj) {
         if (newListNameInput.value) {
             newListModal.close();
             lists.push(new List(newListNameInput.value));
-            new List();
-            render(lists[lists.length - 1]);
+            currentList = lists[lists.length - 1];
+            render(currentList);
         }
     }
 
@@ -136,7 +139,8 @@ function render(obj) {
     // Change list function
     function changeList(listIndex) {
         changeListModal.close();
-        render(lists[listIndex]);
+        currentList = lists[listIndex];
+        render(currentList);
     }
 
     // Tasks
@@ -175,12 +179,11 @@ export function openAddTaskModal() {
     let newTaskTitle = prompt("Task Title");
     let newTaskDesc = prompt("Task Description");
     let newTaskDue = prompt("Task Due Date");
-    lists[0].add(new Task(newTaskTitle, newTaskDesc, newTaskDue));
-    render(".container", lists[0]);
+    currentList.add(new Task(newTaskTitle, newTaskDesc, newTaskDue));
+    render(currentList);
 }
 
 // TESTING
-
 lists.push(new List("Tasks"));
-
+let currentList = lists[0];
 render(lists[0]);
