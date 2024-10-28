@@ -1,5 +1,8 @@
 // RENDER
-function render(obj) {
+export default function (obj) {
+    let listArray = obj.listArray;
+    let currentList = obj.currentList;
+
     const container = document.querySelector("body");
 
     // Clear container
@@ -8,7 +11,7 @@ function render(obj) {
     // List Heading
     let heading = document.createElement("h1");
     heading.classList.add("list-heading");
-    heading.textContent = obj.title;
+    heading.textContent = currentList.title;
     container.appendChild(heading);
 
     // New task button
@@ -31,28 +34,15 @@ function render(obj) {
     newTaskModal.appendChild(newTaskDueInput);
     let newTaskSubmit = document.createElement("button");
     newTaskSubmit.textContent = "Add";
-    newTaskSubmit.addEventListener("click", () => addNewTask());
+    newTaskSubmit.addEventListener("click", () =>
+        obj.addNewTask(
+            newTaskTitleInput.value,
+            newTaskDescInput.value,
+            newTaskDueInput.value
+        )
+    );
     newTaskModal.appendChild(newTaskSubmit);
     container.appendChild(newTaskModal);
-
-    // Add new task
-    function addNewTask() {
-        if (
-            newTaskTitleInput.value &&
-            newTaskDescInput.value &&
-            newTaskDueInput.value
-        ) {
-            newTaskModal.close();
-            currentList.add(
-                new Task(
-                    newTaskTitleInput.value,
-                    newTaskDescInput.value,
-                    newTaskDueInput.value
-                )
-            );
-            render(currentList);
-        }
-    }
 
     // New list button
     let newListBtn = document.createElement("button");
@@ -68,19 +58,11 @@ function render(obj) {
     newListModal.appendChild(newListNameInput);
     let newListSubmit = document.createElement("button");
     newListSubmit.textContent = "Add";
-    newListSubmit.addEventListener("click", () => addNewList());
+    newListSubmit.addEventListener("click", () =>
+        obj.addNewList(newListNameInput.value)
+    );
     newListModal.appendChild(newListSubmit);
     container.appendChild(newListModal);
-
-    // Add new list
-    function addNewList() {
-        if (newListNameInput.value) {
-            newListModal.close();
-            lists.push(new List(newListNameInput.value));
-            currentList = lists[lists.length - 1];
-            render(currentList);
-        }
-    }
 
     // Change list button
     let changeListBtn = document.createElement("button");
@@ -91,29 +73,25 @@ function render(obj) {
     // Change list modal
     let changeListModal = document.createElement("dialog");
     changeListModal.classList.add("new-task-modal");
-    for (let obj of lists) {
+    for (let obj of listArray) {
         let listButton = document.createElement("button");
         listButton.textContent = obj.title;
         listButton.addEventListener("click", () =>
-            changeList(lists.indexOf(obj))
+            changeListPasser(listArray.indexOf(obj))
         );
         changeListModal.appendChild(listButton);
     }
     container.appendChild(changeListModal);
 
-    // Change list function
-    function changeList(listIndex) {
-        changeListModal.close();
-        currentList = lists[listIndex];
-        render(currentList);
+    function changeListPasser(listIndex) {
+        obj.changeList(listIndex);
     }
 
     // Tasks
-    if (obj.tasks) {
-        for (let task of obj.tasks) {
+    if (currentList.tasks) {
+        for (let task of currentList.tasks) {
             let taskDiv = document.createElement("div");
             taskDiv.classList.add("task");
-
             // Title
             let title = document.createElement("h2");
             title.classList.add("task-title");
@@ -134,7 +112,7 @@ function render(obj) {
             complete.classList.add("task-complete");
             complete.textContent = task.complete;
             taskDiv.appendChild(complete);
-
+            // Append
             container.appendChild(taskDiv);
         }
     }
