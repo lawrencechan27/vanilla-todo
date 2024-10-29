@@ -23,15 +23,17 @@ export default function (obj) {
     // New task modal
     let newTaskModal = document.createElement("dialog");
     newTaskModal.classList.add("new-task-modal");
+    let newTaskModalContainer = document.createElement("div");
+    newTaskModal.appendChild(newTaskModalContainer);
     let newTaskTitleInput = document.createElement("input");
     newTaskTitleInput.placeholder = "Task Title";
-    newTaskModal.appendChild(newTaskTitleInput);
+    newTaskModalContainer.appendChild(newTaskTitleInput);
     let newTaskDescInput = document.createElement("input");
     newTaskDescInput.placeholder = "Task Desc";
-    newTaskModal.appendChild(newTaskDescInput);
+    newTaskModalContainer.appendChild(newTaskDescInput);
     let newTaskDueInput = document.createElement("input");
     newTaskDueInput.type = "date";
-    newTaskModal.appendChild(newTaskDueInput);
+    newTaskModalContainer.appendChild(newTaskDueInput);
     let newTaskSubmit = document.createElement("button");
     newTaskSubmit.textContent = "Add";
     newTaskSubmit.addEventListener("click", () =>
@@ -41,7 +43,7 @@ export default function (obj) {
             newTaskDueInput.value
         )
     );
-    newTaskModal.appendChild(newTaskSubmit);
+    newTaskModalContainer.appendChild(newTaskSubmit);
     container.appendChild(newTaskModal);
 
     // New list button
@@ -53,15 +55,17 @@ export default function (obj) {
     // New list modal
     let newListModal = document.createElement("dialog");
     newListModal.classList.add("new-task-modal");
+    let newListModalContainer = document.createElement("div");
+    newListModal.appendChild(newListModalContainer);
     let newListNameInput = document.createElement("input");
     newListNameInput.placeholder = "List Name";
-    newListModal.appendChild(newListNameInput);
+    newListModalContainer.appendChild(newListNameInput);
     let newListSubmit = document.createElement("button");
     newListSubmit.textContent = "Add";
     newListSubmit.addEventListener("click", () =>
         obj.addNewList(newListNameInput.value)
     );
-    newListModal.appendChild(newListSubmit);
+    newListModalContainer.appendChild(newListSubmit);
     container.appendChild(newListModal);
 
     // Change list button
@@ -73,19 +77,29 @@ export default function (obj) {
     // Change list modal
     let changeListModal = document.createElement("dialog");
     changeListModal.classList.add("new-task-modal");
+
+    let changeListModalContainer = document.createElement("div");
+    changeListModal.appendChild(changeListModalContainer);
+
     for (let obj of listArray) {
         let listButton = document.createElement("button");
         listButton.textContent = obj.title;
         listButton.addEventListener("click", () =>
             changeListPasser(listArray.indexOf(obj))
         );
-        changeListModal.appendChild(listButton);
+        changeListModalContainer.appendChild(listButton);
     }
     container.appendChild(changeListModal);
 
     function changeListPasser(listIndex) {
         obj.changeList(listIndex);
     }
+
+    // Remove list button
+    let removeListBtn = document.createElement("button");
+    removeListBtn.textContent = "Remove List";
+    removeListBtn.addEventListener("click", () => obj.removeList());
+    container.appendChild(removeListBtn);
 
     // Tasks
     if (currentList.tasks) {
@@ -108,10 +122,18 @@ export default function (obj) {
             due.textContent = `Due: ${task.due}`;
             taskDiv.appendChild(due);
             // Complete
-            let complete = document.createElement("p");
+            let complete = document.createElement("button");
             complete.classList.add("task-complete");
             complete.textContent = task.complete;
+            complete.addEventListener("click", () => task.toggleComplete());
             taskDiv.appendChild(complete);
+            // Remove
+            let remove = document.createElement("button");
+            remove.classList.add("task-remove");
+            remove.textContent = "Remove";
+            remove.addEventListener("click", () => currentList.remove(task));
+            taskDiv.appendChild(remove);
+
             // Append
             container.appendChild(taskDiv);
         }

@@ -9,21 +9,30 @@
 body {
     font-family: "Inter", sans-serif;
     font-size: 14px;
+    background-color: darkseagreen;
+    padding: 1rem;
 }
 
 .new-task-modal {
     margin: auto;
     border: none;
     padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.new-task-modal > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .list-heading {
 }
 
 .task {
-    border: 1px solid grey;
-    padding: 0.8rem;
-    margin: 5px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background-color: bisque;
 }
 
 .task-title {

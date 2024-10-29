@@ -14,6 +14,7 @@ class List {
     }
     remove(task) {
         this.tasks.splice(this.tasks.indexOf(task), 1);
+        render(lists);
     }
 }
 
@@ -25,10 +26,17 @@ class Task {
         this.title = title;
         this.description = description;
         this.due = due;
-        this.complete = false;
+        // Not sure if should use boolean or not
+        // this.complete = false;
+        this.complete = "Incomplete";
     }
     toggleComplete() {
-        this.complete = !this.complete;
+        // Not sure if should use boolean or not
+        // this.complete = !this.complete;
+        this.complete == "Incomplete"
+            ? (this.complete = "Complete")
+            : (this.complete = "Incomplete");
+        render(lists);
     }
 }
 
@@ -45,10 +53,7 @@ let lists = {
     addNewList: function (title) {
         if (title) {
             lists.listArray.push(new List(title));
-            console.log(lists.currentList);
-
             lists.currentList = lists.listArray[lists.listArray.length - 1];
-            console.log(lists.currentList);
             render(lists);
         }
     },
@@ -56,9 +61,28 @@ let lists = {
         lists.currentList = lists.listArray[listIndex];
         render(lists);
     },
+    removeList: function () {
+        let removeIndex = lists.listArray.indexOf(lists.currentList);
+        lists.listArray.splice(removeIndex, 1);
+        lists.currentList = lists.listArray[0];
+        render(lists);
+    },
 };
 
-// Init
-// lists.listArray[0].add(new Task("Test", "Desc", "2024-10-29", false));
+// FOR TESTING
+lists.addNewList("Shopping");
+lists.listArray[0].add(
+    new Task("Bins", "Take the bins out", "2024-10-31", false)
+);
+lists.listArray[0].add(
+    new Task("Bupa", "Update Hospital cover", "2024-11-01", false)
+);
+lists.listArray[0].add(new Task("Rego", "Renew car rego", "2024-11-04", false));
+lists.listArray[1].add(new Task("Temu", "Green sunnies", "2024-10-31", false));
+lists.listArray[1].add(
+    new Task("Bunnings", "Cement/plastic adhesive", "2024-11-02", false)
+);
+
+// INIT
 lists.currentList = lists.listArray[0];
 render(lists);
