@@ -15,6 +15,7 @@ class List {
     remove(task) {
         this.tasks.splice(this.tasks.indexOf(task), 1);
         render(lists);
+        save(lists);
     }
 }
 
@@ -37,6 +38,7 @@ class Task {
             ? (this.complete = "Complete")
             : (this.complete = "Incomplete");
         render(lists);
+        save(lists);
     }
 }
 
@@ -48,6 +50,7 @@ let lists = {
         if (title && desc && due) {
             lists.currentList.add(new Task(title, desc, due));
             render(lists);
+            save(lists);
         }
     },
     addNewList: function (title) {
@@ -55,34 +58,52 @@ let lists = {
             lists.listArray.push(new List(title));
             lists.currentList = lists.listArray[lists.listArray.length - 1];
             render(lists);
+            save(lists);
         }
     },
     changeList: function (listIndex) {
         lists.currentList = lists.listArray[listIndex];
         render(lists);
+        save(lists);
     },
     removeList: function () {
         let removeIndex = lists.listArray.indexOf(lists.currentList);
         lists.listArray.splice(removeIndex, 1);
         lists.currentList = lists.listArray[0];
         render(lists);
+        save(lists);
     },
 };
 
 // FOR TESTING
-lists.addNewList("Shopping");
-lists.listArray[0].add(
-    new Task("Bins", "Take the bins out", "2024-10-31", false)
-);
-lists.listArray[0].add(
-    new Task("Bupa", "Update Hospital cover", "2024-11-01", false)
-);
-lists.listArray[0].add(new Task("Rego", "Renew car rego", "2024-11-04", false));
-lists.listArray[1].add(new Task("Temu", "Green sunnies", "2024-10-31", false));
-lists.listArray[1].add(
-    new Task("Bunnings", "Cement/plastic adhesive", "2024-11-02", false)
-);
+// lists.addNewList("Shopping");
+// lists.listArray[0].add(
+//     new Task("Bins", "Take the bins out", "2024-10-31", false)
+// );
+// lists.listArray[0].add(
+//     new Task("Bupa", "Update Hospital cover", "2024-11-01", false)
+// );
+// lists.listArray[0].add(new Task("Rego", "Renew car rego", "2024-11-04", false));
+// lists.listArray[1].add(new Task("Temu", "Green sunnies", "2024-10-31", false));
+// lists.listArray[1].add(
+//     new Task("Bunnings", "Cement/plastic adhesive", "2024-11-02", false)
+// );
 
 // INIT
+
 lists.currentList = lists.listArray[0];
+
+function save(obj) {
+    localStorage.setItem("lists", JSON.stringify(obj));
+}
+
+function load() {
+    lists = JSON.parse(localStorage.getItem("lists"));
+}
+
+// NOTE: Find a way to re-attach functions to loaded object since localStorage can't store functions.
+// Maybe use prototypes or object assign. Will need to re-attach them to lists object, as well as List and Task classes
+
+load(lists);
+
 render(lists);
