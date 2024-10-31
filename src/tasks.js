@@ -1,9 +1,9 @@
 import "./styles.css";
+
 // import { List, Task, render, newTaskModal } from "./tasks.js";
 import render from "./render.js";
 
 // LIST
-
 class List {
     constructor(title) {
         this.title = title;
@@ -18,34 +18,51 @@ class List {
         save(lists);
     }
 }
+let listMethods = {
+    add: function (task) {
+        this.tasks.push(task);
+    },
+    remove: function (task) {
+        this.tasks.splice(this.tasks.indexOf(task), 1);
+        render(lists);
+        save(lists);
+    },
+};
 
 // TASKS
-
 class Task {
     constructor(title, description, due) {
-        // this.id = crypto.randomUUID();
         this.title = title;
         this.description = description;
         this.due = due;
-        // Not sure if should use boolean or not
-        // this.complete = false;
         this.complete = "Incomplete";
     }
     toggleComplete() {
-        // Not sure if should use boolean or not
-        // this.complete = !this.complete;
         this.complete == "Incomplete"
             ? (this.complete = "Complete")
             : (this.complete = "Incomplete");
         render(lists);
+
         save(lists);
     }
 }
+let taskMethods = {
+    toggleComplete() {
+        this.complete == "Incomplete"
+            ? (this.complete = "Complete")
+            : (this.complete = "Incomplete");
+        render(lists);
 
+        save(lists);
+    },
+};
 // LISTS
 let lists = {
     listArray: [new List("Tasks")],
     currentList: null,
+};
+
+let listsMethods = {
     addNewTask: function (title, desc, due) {
         if (title && desc && due) {
             lists.currentList.add(new Task(title, desc, due));
@@ -75,34 +92,26 @@ let lists = {
     },
 };
 
-// FOR TESTING
-// lists.addNewList("Shopping");
-// lists.listArray[0].add(
-//     new Task("Bins", "Take the bins out", "2024-10-31", false)
-// );
-// lists.listArray[0].add(
-//     new Task("Bupa", "Update Hospital cover", "2024-11-01", false)
-// );
-// lists.listArray[0].add(new Task("Rego", "Renew car rego", "2024-11-04", false));
-// lists.listArray[1].add(new Task("Temu", "Green sunnies", "2024-10-31", false));
-// lists.listArray[1].add(
-//     new Task("Bunnings", "Cement/plastic adhesive", "2024-11-02", false)
-// );
-
 // INIT
-
-lists.currentList = lists.listArray[0];
 
 function save(obj) {
     localStorage.setItem("lists", JSON.stringify(obj));
 }
-
 function load() {
     lists = JSON.parse(localStorage.getItem("lists"));
-}
 
-// NOTE: Find a way to re-attach functions to loaded object since localStorage can't store functions.
-// Maybe use prototypes or object assign. Will need to re-attach them to lists object, as well as List and Task classes
+    // Assign methods to lists
+    Object.assign(lists, listsMethods);
+
+    // Assign methods to List object
+    for (let obj of lists.listArray) {
+        Object.assign(obj, listMethods);
+        for (let task of obj.tasks) {
+            Object.assign(task, taskMethods);
+        }
+    }
+    lists.currentList = lists.listArray[0];
+}
 
 load(lists);
 
